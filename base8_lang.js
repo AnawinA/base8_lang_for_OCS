@@ -85,7 +85,12 @@ function toBase8Lang(text, isStandard = false) {
         ascii = text.charCodeAt(i);
         asciiStr = ascii.toString(8);
         asciiOrder = ["0", "0", "0"];
-        if (text[i-1] !== "%" && text[i] === "%") {
+        if (text[i] === '.') {
+            base8Lang += ' ·';
+            thirdNum = "0";
+            secondNum = "0";
+            continue
+        } else if (text[i-1] !== "%" && text[i] === "%") {
             continue
         } else if (/[^a-zA-Z0-9]/.test(text[i]) && (text[i-1] !== "%" || text[i] === "%")) {
             base8Lang += text[i];
@@ -117,7 +122,13 @@ function toEnglish(text) {
     asciiOrder = ["0", "0", "0"];
     for (let i = 0; i < text.length; i++) {
         char = text[i];
-        if (char === "ํ" || char === "°") {
+        if ((char === ' ' && text[i+1] === '·') || 
+            (char === '·' && text[i-1] !== ' ')) {
+            englishLang += '.';
+            continue
+        } else if (char === "·") {
+            continue
+        } else if (char === "ํ" || char === "°") {
             thirdNum = text[i-1];
         } else if (char === "ฺ" || char === ".") {
             secondNum = text[i-1];
@@ -136,13 +147,12 @@ function toEnglish(text) {
 }
 
 
-
-v = toBase8Lang("Never, give you UP! %! %%.", true);
+v = toBase8Lang("Hmm...", false);
 console.log(v);
 vStr = toEnglish(v);
 console.log(vStr);
 
-// lorem_e = toBase8Lang("Lorem, ipsum dolor sit amet consectetur adipisicing elit. Minima perferendis provident harum voluptatum saepe, qui consectetur repudiandae vitae quae, veniam odio tenetur ea? Hic officia autem ad enim inventore atque?");
-// console.log(lorem_e);
-// lorem = toEnglish(lorem_e);
-// console.log(lorem);
+lorem_e = toBase8Lang("Lorem, ipsum dolor sit amet consectetur adipisicing elit. Minima perferendis provident harum voluptatum saepe, qui consectetur repudiandae vitae quae, veniam odio tenetur ea? Hic officia autem ad enim inventore atque?");
+console.log(lorem_e);
+lorem = toEnglish(lorem_e);
+console.log(lorem);
